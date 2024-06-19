@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body {
+      background-color: skyblue;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .question-input, .email-input {
+      width: 70%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .submit-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .submit-btn:hover {
+      background-color: #45a049;
+    }
+    #response {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f1f1f1;
+      border-radius: 4px;
+      display: none; /* Hide response initially */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome Champions</h1>
+    <form id="chatForm">
+      <label for="userInput">Ask a question:</label><br>
+      <input type="text" id="userInput" name="userInput" class="question-input"><br>
+      <label for="userEmail">Your Email (optional):</label><br>
+      <input type="email" id="userEmail" name="userEmail" class="email-input"><br>
+      <button class="submit-btn" type="submit">Submit</button>
+    </form>
+    <div id="response"></div>
+  </div>
+
+  <script>
+    document.getElementById('chatForm').onsubmit = function(e) {
+      e.preventDefault();
+      var userInput = document.getElementById('userInput').value;
+      var userEmail = document.getElementById('userEmail').value;
+      var submitBtn = document.querySelector('.submit-btn');
+      submitBtn.innerHTML = 'Processing...';
+      google.script.run.withSuccessHandler(showResponse).getResponse(userInput, userEmail);
+      
+      // Clear input fields after submission
+      document.getElementById('userInput').value = '';
+      document.getElementById('userEmail').value = '';
+    };
+
+    function showResponse(response) {
+      var responseElement = document.getElementById('response');
+      responseElement.innerHTML = '<p>' + response + '</p>';
+      responseElement.style.display = 'block';
+      var submitBtn = document.querySelector('.submit-btn');
+      submitBtn.innerHTML = 'Submit';
+      
+      // Clear input fields after displaying response
+      document.getElementById('userInput').value = '';
+      document.getElementById('userEmail').value = '';
+    }
+  </script>
+</body>
+</html>
